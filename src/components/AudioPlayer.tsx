@@ -33,7 +33,7 @@ const AudioPlayer = () => {
   return (
     <motion.button
       onClick={toggleMute}
-      className="fixed top-6 right-6 z-40 cyber-card p-3 flex items-center gap-3 cursor-pointer group"
+      className="fixed top-6 right-6 z-40 premium-card p-3 flex items-center gap-3 cursor-pointer group"
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.5 }}
@@ -42,10 +42,10 @@ const AudioPlayer = () => {
     >
       <div className="relative">
         {isMuted ? (
-          <VolumeX className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+          <VolumeX className="w-5 h-5 text-muted-foreground group-hover:text-gold transition-colors" />
         ) : (
           <>
-            <Volume2 className="w-5 h-5 text-primary" />
+            <Volume2 className="w-5 h-5 text-gold" />
             {/* Sound wave animation */}
             <motion.div
               className="absolute -right-2 top-0 flex gap-0.5"
@@ -55,7 +55,7 @@ const AudioPlayer = () => {
               {[...Array(3)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="w-0.5 bg-primary rounded-full"
+                  className="w-0.5 bg-gold rounded-full"
                   animate={{ height: ['4px', '12px', '4px'] }}
                   transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.1 }}
                 />
@@ -64,8 +64,8 @@ const AudioPlayer = () => {
           </>
         )}
       </div>
-      <span className="text-sm font-mono text-muted-foreground group-hover:text-foreground transition-colors">
-        {isMuted ? 'AUDIO OFF' : 'AUDIO ON'}
+      <span className="text-sm font-serif text-muted-foreground group-hover:text-foreground transition-colors tracking-wider">
+        {isMuted ? '音乐关闭' : '音乐播放'}
       </span>
     </motion.button>
   );

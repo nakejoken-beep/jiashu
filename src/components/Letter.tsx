@@ -57,62 +57,55 @@ const Letter = ({ recipientName, onLeaveMessage }: LetterProps) => {
 
   const pageVariants = {
     enter: (direction: number) => ({
-      x: direction > 0 ? 100 : -100,
+      x: direction > 0 ? 80 : -80,
       opacity: 0,
-      scale: 0.95,
     }),
     center: {
       x: 0,
       opacity: 1,
-      scale: 1,
     },
     exit: (direction: number) => ({
-      x: direction > 0 ? -100 : 100,
+      x: direction > 0 ? -80 : 80,
       opacity: 0,
-      scale: 0.95,
     }),
   };
 
   return (
     <motion.div
       className="w-full max-w-3xl mx-auto"
-      initial={{ opacity: 0, y: 100, scale: 0.9 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
+      initial={{ opacity: 0, y: 80 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: 'easeOut' }}
     >
       {/* Letter paper */}
-      <div className="letter-paper p-8 md:p-12 min-h-[550px] relative">
-        {/* HUD corners */}
-        <div className="hud-corner top-left" />
-        <div className="hud-corner top-right" />
-        <div className="hud-corner bottom-left" />
-        <div className="hud-corner bottom-right" />
+      <div className="letter-paper p-10 md:p-14 min-h-[580px] relative">
+        {/* Corner ornaments */}
+        <div className="corner-ornament top-left" />
+        <div className="corner-ornament top-right" />
+        <div className="corner-ornament bottom-left" />
+        <div className="corner-ornament bottom-right" />
 
         {/* Top decoration */}
-        <motion.div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px"
-          style={{
-            background: 'linear-gradient(90deg, transparent, hsl(185 100% 50%), transparent)',
-          }}
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3">
+          <div className="h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+        </div>
 
         {/* Header */}
         <motion.div
-          className="text-center mb-10"
+          className="text-center mb-12"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <div className="inline-block mb-3 px-4 py-1 border border-primary/30 rounded-full">
-            <span className="text-xs font-mono tracking-widest text-primary/70">
-              ◈ HOMETOWN LETTER ◈
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <div className="w-16 h-px bg-gradient-to-r from-transparent to-gold/40" />
+            <span className="text-xs tracking-[0.4em] text-gold/60 font-serif">
+              家书
             </span>
+            <div className="w-16 h-px bg-gradient-to-l from-transparent to-gold/40" />
           </div>
           <h1 
-            className="text-3xl md:text-4xl gold-text font-bold"
-            style={{ fontFamily: 'Noto Serif SC, serif' }}
+            className="text-3xl md:text-4xl gold-text font-bold font-serif"
           >
             致 {recipientName}
           </h1>
@@ -132,12 +125,11 @@ const Letter = ({ recipientName, onLeaveMessage }: LetterProps) => {
               className="text-letter"
             >
               <h3 
-                className="text-2xl cyber-text mb-6"
-                style={{ fontFamily: 'Noto Serif SC, serif', textShadow: '0 0 10px hsl(185 100% 50% / 0.5)' }}
+                className="text-2xl text-crimson font-bold mb-8 font-serif"
               >
                 {letterPages[currentPage].title}
               </h3>
-              <div className="space-y-5 text-foreground/85 leading-loose text-lg">
+              <div className="space-y-6 text-foreground/85 leading-loose text-lg font-serif">
                 {letterPages[currentPage].content.split('\n\n').map((paragraph, index) => (
                   <motion.p
                     key={index}
@@ -154,16 +146,16 @@ const Letter = ({ recipientName, onLeaveMessage }: LetterProps) => {
         </div>
 
         {/* Navigation */}
-        <div className="flex items-center justify-between mt-10 pt-6 border-t border-primary/20">
+        <div className="flex items-center justify-between mt-12 pt-8 border-t border-gold/20">
           <motion.button
             onClick={prevPage}
             disabled={currentPage === 0}
-            className="neon-button flex items-center gap-2 px-6 py-3"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-2 px-6 py-3 border border-gold/30 rounded text-gold hover:bg-gold/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            whileHover={{ scale: currentPage === 0 ? 1 : 1.03 }}
+            whileTap={{ scale: currentPage === 0 ? 1 : 0.97 }}
           >
             <ChevronLeft className="w-5 h-5" />
-            <span className="font-mono text-sm">上一页</span>
+            <span className="font-serif text-sm">上一页</span>
           </motion.button>
 
           {/* Page indicator */}
@@ -171,15 +163,11 @@ const Letter = ({ recipientName, onLeaveMessage }: LetterProps) => {
             {letterPages.map((_, index) => (
               <motion.div
                 key={index}
-                className={`h-2 rounded-full transition-all duration-300 ${
+                className={`h-1.5 rounded-full transition-all duration-300 ${
                   index === currentPage
-                    ? 'w-8 bg-primary shadow-[0_0_10px_hsl(185_100%_50%)]'
-                    : 'w-2 bg-muted-foreground/30'
+                    ? 'w-8 bg-gold'
+                    : 'w-1.5 bg-muted-foreground/30'
                 }`}
-                animate={index === currentPage ? { 
-                  boxShadow: ['0 0 10px hsl(185 100% 50% / 0.5)', '0 0 20px hsl(185 100% 50% / 0.8)', '0 0 10px hsl(185 100% 50% / 0.5)']
-                } : {}}
-                transition={{ duration: 1.5, repeat: Infinity }}
               />
             ))}
           </div>
@@ -187,33 +175,30 @@ const Letter = ({ recipientName, onLeaveMessage }: LetterProps) => {
           {currentPage < letterPages.length - 1 ? (
             <motion.button
               onClick={nextPage}
-              className="neon-button flex items-center gap-2 px-6 py-3"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 px-6 py-3 border border-gold/30 rounded text-gold hover:bg-gold/10 transition-all"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
             >
-              <span className="font-mono text-sm">下一页</span>
+              <span className="font-serif text-sm">下一页</span>
               <ChevronRight className="w-5 h-5" />
             </motion.button>
           ) : (
             <motion.button
               onClick={onLeaveMessage}
-              className="gold-neon-button flex items-center gap-2"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="crimson-button flex items-center gap-2"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
             >
               <MessageSquare className="w-5 h-5" />
-              <span className="font-mono text-sm">给家乡留言</span>
+              <span className="font-serif text-sm">给家乡留言</span>
             </motion.button>
           )}
         </div>
 
         {/* Bottom decoration */}
-        <motion.div
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-px"
-          style={{
-            background: 'linear-gradient(90deg, transparent, hsl(185 100% 50% / 0.5), transparent)',
-          }}
-        />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3">
+          <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+        </div>
       </div>
     </motion.div>
   );

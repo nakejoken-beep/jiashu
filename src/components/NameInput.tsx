@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { User, ArrowRight, Hexagon } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface NameInputProps {
   onSubmit: (name: string) => void;
@@ -23,15 +23,6 @@ const NameInput = ({ onSubmit }: NameInputProps) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
     >
-      {/* Decorative hexagons */}
-      <motion.div
-        className="absolute -top-20 left-1/2 -translate-x-1/2"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-      >
-        <Hexagon className="w-32 h-32 text-primary/10" strokeWidth={0.5} />
-      </motion.div>
-
       {/* Title */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -40,23 +31,27 @@ const NameInput = ({ onSubmit }: NameInputProps) => {
         className="mb-12 relative z-10"
       >
         <motion.div
-          className="inline-block mb-4 px-4 py-1 border border-primary/30 rounded-full"
+          className="inline-block mb-6"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <span className="text-xs font-mono tracking-widest text-primary/70">
-            ◈ HOMETOWN LETTER SYSTEM ◈
-          </span>
+          <div className="flex items-center justify-center gap-4">
+            <div className="w-12 h-px bg-gradient-to-r from-transparent to-gold/60" />
+            <span className="text-xs tracking-[0.4em] text-gold/70 font-serif">
+              乡情寄语
+            </span>
+            <div className="w-12 h-px bg-gradient-to-l from-transparent to-gold/60" />
+          </div>
         </motion.div>
         
-        <h1 className="text-5xl md:text-6xl font-bold mb-4" style={{ fontFamily: 'Orbitron, monospace' }}>
-          <span className="cyber-text">一封</span>
-          <span className="gold-text ml-2">家书</span>
+        <h1 className="text-5xl md:text-6xl font-bold mb-6 font-serif">
+          <span className="gold-text">一封</span>
+          <span className="text-foreground ml-3">家书</span>
         </h1>
         
         <motion.p
-          className="text-muted-foreground text-lg tracking-wide"
+          className="text-muted-foreground text-lg tracking-wide font-serif"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
@@ -65,48 +60,30 @@ const NameInput = ({ onSubmit }: NameInputProps) => {
         </motion.p>
         
         <motion.div
-          className="flex justify-center gap-1 mt-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
-        >
-          {[...Array(5)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="w-8 h-1 bg-primary/30 rounded-full"
-              animate={{ opacity: [0.3, 1, 0.3] }}
-              transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
-            />
-          ))}
-        </motion.div>
+          className="decorative-line w-48 mx-auto mt-6"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ delay: 0.7, duration: 0.8 }}
+        />
       </motion.div>
 
       {/* Input form */}
       <motion.form
         onSubmit={handleSubmit}
-        className="cyber-card p-8 relative"
+        className="premium-card p-10 relative"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.5 }}
       >
-        {/* HUD corners */}
-        <div className="hud-corner top-left" />
-        <div className="hud-corner top-right" />
-        <div className="hud-corner bottom-left" />
-        <div className="hud-corner bottom-right" />
+        {/* Corner ornaments */}
+        <div className="corner-ornament top-left" />
+        <div className="corner-ornament top-right" />
+        <div className="corner-ornament bottom-left" />
+        <div className="corner-ornament bottom-right" />
 
-        <div className="flex items-center gap-4 mb-8">
-          <motion.div
-            className="w-14 h-14 rounded-lg border border-primary/50 flex items-center justify-center"
-            animate={{ boxShadow: ['0 0 20px hsl(185 100% 50% / 0.2)', '0 0 40px hsl(185 100% 50% / 0.4)', '0 0 20px hsl(185 100% 50% / 0.2)'] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <User className="w-7 h-7 text-primary" />
-          </motion.div>
-          <div className="text-left">
-            <p className="text-foreground font-semibold text-lg tracking-wide">身份认证</p>
-            <p className="text-sm text-muted-foreground font-mono">ENTER YOUR IDENTITY</p>
-          </div>
+        <div className="text-center mb-8">
+          <p className="text-foreground font-serif text-lg tracking-wide">请输入您的姓名</p>
+          <p className="text-sm text-muted-foreground mt-1">开启您的专属家书</p>
         </div>
 
         <div className="relative mb-8">
@@ -114,56 +91,45 @@ const NameInput = ({ onSubmit }: NameInputProps) => {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="请输入您的姓名"
-            className="w-full p-5 bg-muted/50 border-2 border-primary/30 rounded-lg text-center text-xl tracking-wider focus:outline-none focus:border-primary focus:shadow-[0_0_30px_hsl(185_100%_50%_/_0.3)] transition-all text-foreground placeholder:text-muted-foreground/50"
-            style={{ fontFamily: 'Noto Serif SC, serif' }}
+            placeholder="您的姓名"
+            className="w-full p-5 bg-muted/30 border border-gold/30 rounded text-center text-xl tracking-wider focus:outline-none focus:border-gold focus:shadow-[0_0_20px_hsl(42_85%_55%_/_0.2)] transition-all text-foreground placeholder:text-muted-foreground/50 font-serif"
             autoFocus
           />
           <motion.div
-            className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: name ? 1 : 0 }}
+            className="absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-gold"
+            initial={{ width: 0 }}
+            animate={{ width: name ? '100%' : 0 }}
             transition={{ duration: 0.3 }}
+            style={{ marginLeft: name ? '-50%' : 0 }}
           />
         </div>
 
         <motion.button
           type="submit"
           disabled={!name.trim()}
-          className="gold-neon-button w-full flex items-center justify-center gap-3"
+          className="elegant-button w-full flex items-center justify-center gap-3 text-lg"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <span style={{ fontFamily: 'Orbitron, monospace' }}>开始阅读</span>
+          <span className="font-serif tracking-widest">开始阅读</span>
           <ArrowRight className="w-5 h-5" />
         </motion.button>
-
-        <motion.p
-          className="mt-6 text-xs text-muted-foreground font-mono tracking-wider"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.5 }}
-          transition={{ delay: 1 }}
-        >
-          ▸ SECURE CONNECTION ESTABLISHED ◂
-        </motion.p>
       </motion.form>
 
       {/* Bottom decoration */}
       <motion.div
-        className="mt-10 flex items-center justify-center gap-4"
+        className="mt-12 flex items-center justify-center gap-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
       >
-        <div className="w-20 h-px bg-gradient-to-r from-transparent to-primary/50" />
-        <motion.span
-          className="text-primary text-sm tracking-[0.3em] font-mono"
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          乡情永系
-        </motion.span>
-        <div className="w-20 h-px bg-gradient-to-l from-transparent to-primary/50" />
+        <div className="w-16 h-px bg-gradient-to-r from-transparent to-gold/40" />
+        <div className="status-dot" />
+        <span className="text-gold/60 text-sm tracking-[0.3em] font-serif">
+          家书抵万金
+        </span>
+        <div className="status-dot" />
+        <div className="w-16 h-px bg-gradient-to-l from-transparent to-gold/40" />
       </motion.div>
     </motion.div>
   );
