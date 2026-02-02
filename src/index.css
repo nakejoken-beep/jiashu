@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Noto+Serif+SC:wght@400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,49 +6,52 @@
 
 @layer base {
   :root {
-    /* Deep space blue theme - tech + warmth */
-    --background: 220 30% 8%;
-    --foreground: 45 30% 96%;
+    /* Cyberpunk dark theme */
+    --background: 220 40% 4%;
+    --foreground: 180 100% 95%;
 
-    --card: 220 25% 12%;
-    --card-foreground: 45 30% 96%;
+    --card: 220 35% 8%;
+    --card-foreground: 180 100% 95%;
 
-    --popover: 220 25% 10%;
-    --popover-foreground: 45 30% 96%;
+    --popover: 220 35% 6%;
+    --popover-foreground: 180 100% 95%;
 
-    /* Gold accent for warmth */
-    --primary: 42 85% 55%;
-    --primary-foreground: 220 30% 8%;
+    /* Cyan neon accent */
+    --primary: 185 100% 50%;
+    --primary-foreground: 220 40% 4%;
 
-    --secondary: 220 20% 18%;
-    --secondary-foreground: 45 20% 90%;
+    /* Gold/amber secondary */
+    --secondary: 42 100% 50%;
+    --secondary-foreground: 220 40% 4%;
 
-    --muted: 220 15% 20%;
-    --muted-foreground: 220 10% 60%;
+    --muted: 220 30% 15%;
+    --muted-foreground: 220 20% 50%;
 
-    --accent: 42 70% 45%;
-    --accent-foreground: 220 30% 8%;
+    --accent: 280 100% 60%;
+    --accent-foreground: 220 40% 4%;
 
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 20% 20%;
-    --input: 220 20% 18%;
-    --ring: 42 85% 55%;
+    --border: 185 50% 20%;
+    --input: 220 30% 12%;
+    --ring: 185 100% 50%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    /* Custom tokens */
-    --glow-gold: 42 90% 60%;
-    --glass-bg: 220 25% 15%;
-    --glass-border: 220 20% 25%;
-    --star-color: 45 100% 90%;
+    /* Neon colors */
+    --neon-cyan: 185 100% 50%;
+    --neon-gold: 42 85% 55%;
+    --neon-purple: 280 100% 60%;
+    --neon-pink: 330 100% 60%;
+    
+    /* Glass */
+    --glass-bg: 220 35% 10%;
+    --glass-border: 185 50% 25%;
 
     /* Gradients */
-    --gradient-gold: linear-gradient(135deg, hsl(42 85% 55%), hsl(35 90% 45%));
-    --gradient-glass: linear-gradient(135deg, hsl(220 25% 15% / 0.6), hsl(220 30% 10% / 0.8));
-    --gradient-radial: radial-gradient(ellipse at center, hsl(220 30% 15% / 0.5), transparent 70%);
-    --gradient-text: linear-gradient(135deg, hsl(45 30% 96%), hsl(42 85% 70%));
+    --gradient-cyber: linear-gradient(135deg, hsl(185 100% 50% / 0.1), hsl(280 100% 60% / 0.1));
+    --gradient-neon: linear-gradient(90deg, hsl(185 100% 50%), hsl(280 100% 60%));
   }
 }
 
@@ -59,102 +62,252 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', 'Noto Serif SC', system-ui, sans-serif;
+    font-family: 'Rajdhani', 'Inter', system-ui, sans-serif;
   }
 }
 
 @layer components {
-  .glass-card {
-    @apply bg-card/60 backdrop-blur-xl border border-glass-border rounded-2xl;
+  .cyber-card {
+    @apply relative bg-card/80 backdrop-blur-xl rounded-lg overflow-hidden;
+    border: 1px solid hsl(var(--neon-cyan) / 0.3);
     box-shadow: 
-      0 8px 32px hsl(var(--background) / 0.4),
-      inset 0 1px 0 hsl(var(--glass-border) / 0.3);
+      0 0 30px hsl(var(--neon-cyan) / 0.1),
+      inset 0 1px 0 hsl(var(--neon-cyan) / 0.1);
   }
 
-  .glass-button {
-    @apply bg-secondary/80 backdrop-blur-md border border-glass-border rounded-xl px-6 py-3;
-    @apply text-foreground font-medium transition-all duration-300;
-    @apply hover:bg-secondary hover:border-primary/50 hover:shadow-lg;
-    box-shadow: 0 4px 16px hsl(var(--background) / 0.3);
+  .cyber-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, hsl(var(--neon-cyan)), transparent);
   }
 
-  .gold-button {
-    @apply bg-gradient-to-r from-primary to-accent text-primary-foreground;
-    @apply font-semibold rounded-xl px-8 py-4 transition-all duration-300;
-    @apply hover:shadow-2xl hover:scale-105;
-    box-shadow: 0 8px 32px hsl(var(--primary) / 0.3);
+  .cyber-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--neon-cyan) / 0.5), transparent);
+  }
+
+  .neon-button {
+    @apply relative px-8 py-4 font-semibold tracking-wider uppercase;
+    @apply bg-transparent border-2 rounded-sm;
+    border-color: hsl(var(--neon-cyan));
+    color: hsl(var(--neon-cyan));
+    text-shadow: 0 0 10px hsl(var(--neon-cyan) / 0.8);
+    box-shadow: 
+      0 0 20px hsl(var(--neon-cyan) / 0.3),
+      inset 0 0 20px hsl(var(--neon-cyan) / 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .neon-button:hover {
+    background: hsl(var(--neon-cyan) / 0.2);
+    box-shadow: 
+      0 0 40px hsl(var(--neon-cyan) / 0.5),
+      inset 0 0 30px hsl(var(--neon-cyan) / 0.2);
+    transform: translateY(-2px);
+  }
+
+  .neon-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .gold-neon-button {
+    @apply relative px-8 py-4 font-bold tracking-wider uppercase rounded-sm;
+    background: linear-gradient(135deg, hsl(42 100% 50%), hsl(35 100% 45%));
+    color: hsl(var(--background));
+    text-shadow: none;
+    box-shadow: 
+      0 0 30px hsl(42 100% 50% / 0.4),
+      0 0 60px hsl(42 100% 50% / 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .gold-neon-button:hover {
+    box-shadow: 
+      0 0 50px hsl(42 100% 50% / 0.6),
+      0 0 100px hsl(42 100% 50% / 0.3);
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .cyber-text {
+    @apply font-bold tracking-widest uppercase;
+    font-family: 'Orbitron', monospace;
+    color: hsl(var(--neon-cyan));
+    text-shadow: 
+      0 0 10px hsl(var(--neon-cyan)),
+      0 0 20px hsl(var(--neon-cyan) / 0.5),
+      0 0 40px hsl(var(--neon-cyan) / 0.3);
   }
 
   .gold-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-foreground via-primary to-foreground;
+    background: linear-gradient(135deg, hsl(45 100% 70%), hsl(42 100% 55%), hsl(35 100% 50%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 10px hsl(42 100% 50% / 0.5));
   }
 
   .letter-paper {
-    @apply bg-gradient-to-br from-card via-card/95 to-secondary/80;
-    @apply backdrop-blur-xl border border-glass-border rounded-3xl;
+    @apply relative bg-card/90 backdrop-blur-xl rounded-lg overflow-hidden;
+    border: 1px solid hsl(var(--neon-cyan) / 0.2);
     box-shadow: 
-      0 25px 50px -12px hsl(var(--background) / 0.6),
-      inset 0 1px 0 hsl(var(--glass-border) / 0.5),
-      0 0 100px hsl(var(--primary) / 0.1);
+      0 20px 60px hsl(var(--background) / 0.8),
+      0 0 100px hsl(var(--neon-cyan) / 0.1),
+      inset 0 1px 0 hsl(var(--neon-cyan) / 0.1);
   }
 
   .envelope {
-    @apply relative overflow-hidden;
+    @apply relative overflow-hidden rounded-xl;
     background: linear-gradient(180deg, 
-      hsl(220 25% 16%) 0%,
-      hsl(220 28% 12%) 50%,
-      hsl(220 30% 10%) 100%
+      hsl(220 35% 12%) 0%,
+      hsl(220 38% 8%) 50%,
+      hsl(220 40% 6%) 100%
     );
-    border: 1px solid hsl(var(--glass-border));
+    border: 1px solid hsl(var(--neon-cyan) / 0.3);
     box-shadow: 
       0 20px 60px hsl(var(--background) / 0.5),
-      inset 0 2px 0 hsl(var(--glass-border) / 0.3);
+      0 0 80px hsl(var(--neon-cyan) / 0.15);
   }
 
   .seal {
-    @apply bg-gradient-to-br from-primary via-accent to-primary;
+    background: linear-gradient(135deg, hsl(42 100% 55%), hsl(35 100% 45%));
     box-shadow: 
-      0 4px 20px hsl(var(--primary) / 0.5),
+      0 0 30px hsl(42 100% 50% / 0.6),
+      0 0 60px hsl(42 100% 50% / 0.3),
       inset 0 2px 4px hsl(45 100% 80% / 0.3);
   }
 
   .text-letter {
     font-family: 'Noto Serif SC', serif;
-    @apply text-foreground/90 leading-relaxed;
+    @apply text-foreground/90 leading-loose;
+  }
+
+  /* Scanline effect */
+  .scanlines {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 2px,
+      hsl(var(--neon-cyan) / 0.02) 2px,
+      hsl(var(--neon-cyan) / 0.02) 4px
+    );
+  }
+
+  /* Grid lines */
+  .cyber-grid {
+    background-image: 
+      linear-gradient(hsl(var(--neon-cyan) / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--neon-cyan) / 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  /* HUD corner decorations */
+  .hud-corner {
+    @apply absolute w-8 h-8;
+  }
+
+  .hud-corner::before,
+  .hud-corner::after {
+    content: '';
+    position: absolute;
+    background: hsl(var(--neon-cyan));
+    box-shadow: 0 0 10px hsl(var(--neon-cyan));
+  }
+
+  .hud-corner.top-left::before {
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+  }
+  .hud-corner.top-left::after {
+    top: 0; left: 0;
+    width: 2px; height: 100%;
+  }
+
+  .hud-corner.top-right::before {
+    top: 0; right: 0;
+    width: 100%; height: 2px;
+  }
+  .hud-corner.top-right::after {
+    top: 0; right: 0;
+    width: 2px; height: 100%;
+  }
+
+  .hud-corner.bottom-left::before {
+    bottom: 0; left: 0;
+    width: 100%; height: 2px;
+  }
+  .hud-corner.bottom-left::after {
+    bottom: 0; left: 0;
+    width: 2px; height: 100%;
+  }
+
+  .hud-corner.bottom-right::before {
+    bottom: 0; right: 0;
+    width: 100%; height: 2px;
+  }
+  .hud-corner.bottom-right::after {
+    bottom: 0; right: 0;
+    width: 2px; height: 100%;
   }
 }
 
 @layer utilities {
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
   }
 
-  .animate-glow {
-    animation: glow 3s ease-in-out infinite alternate;
+  .animate-scan {
+    animation: scan 3s linear infinite;
   }
 
-  .animate-shimmer {
-    animation: shimmer 3s linear infinite;
-    background-size: 200% 100%;
+  .animate-flicker {
+    animation: flicker 0.15s infinite;
+  }
+
+  .animate-data-stream {
+    animation: data-stream 20s linear infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { 
+      box-shadow: 0 0 20px hsl(var(--neon-cyan) / 0.3);
+    }
+    50% { 
+      box-shadow: 0 0 40px hsl(var(--neon-cyan) / 0.6), 0 0 80px hsl(var(--neon-cyan) / 0.3);
+    }
+  }
+
+  @keyframes scan {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+  }
+
+  @keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+
+  @keyframes data-stream {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 1000px; }
   }
 
   @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
-  }
-
-  @keyframes glow {
-    from { box-shadow: 0 0 20px hsl(var(--primary) / 0.3); }
-    to { box-shadow: 0 0 40px hsl(var(--primary) / 0.6); }
-  }
-
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
-
-  @keyframes twinkle {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 1; }
+    0%, 100% { transform: translateY(0px) rotateY(0deg); }
+    50% { transform: translateY(-10px) rotateY(5deg); }
   }
 }

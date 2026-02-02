@@ -14,8 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
+        orbitron: ["'Orbitron'", "monospace"],
         serif: ["'Noto Serif SC'", "serif"],
-        sans: ["'Inter'", "system-ui", "sans-serif"],
+        sans: ["'Rajdhani'", "'Inter'", "system-ui", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -51,8 +52,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        "neon-cyan": "hsl(var(--neon-cyan))",
+        "neon-gold": "hsl(var(--neon-gold))",
+        "neon-purple": "hsl(var(--neon-purple))",
         "glass-border": "hsl(var(--glass-border))",
-        "glow-gold": "hsl(var(--glow-gold))",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -68,30 +71,10 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "envelope-open": {
-          "0%": { transform: "rotateX(0deg)" },
-          "100%": { transform: "rotateX(-180deg)" },
-        },
-        "letter-rise": {
-          "0%": { transform: "translateY(100%)", opacity: "0" },
-          "100%": { transform: "translateY(0)", opacity: "1" },
-        },
-        "page-flip": {
-          "0%": { transform: "rotateY(0deg)" },
-          "100%": { transform: "rotateY(-180deg)" },
-        },
-        pulse: {
-          "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.5" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "envelope-open": "envelope-open 1s ease-in-out forwards",
-        "letter-rise": "letter-rise 0.8s ease-out forwards",
-        "page-flip": "page-flip 0.6s ease-in-out",
-        pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
     },
   },
