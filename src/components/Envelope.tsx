@@ -15,31 +15,35 @@ const Envelope = ({ recipientName, onOpen }: EnvelopeProps) => {
   };
 
   return (
-    <div className="relative w-full max-w-md mx-auto">
+    <div className="relative w-full max-w-lg mx-auto px-4">
       {/* Subtle outer glow */}
       <motion.div
-        className="absolute inset-0 -m-12 rounded-full"
+        className="absolute inset-0 -m-16"
         style={{
-          background: 'radial-gradient(circle, hsl(42 85% 55% / 0.08) 0%, transparent 60%)',
+          background: 'radial-gradient(circle, hsl(42 85% 55% / 0.12) 0%, transparent 60%)',
         }}
         animate={{
           scale: [1, 1.05, 1],
-          opacity: [0.5, 0.7, 0.5],
+          opacity: [0.5, 0.8, 0.5],
         }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
 
       {/* Envelope body */}
       <motion.div
-        className="envelope relative w-full aspect-[4/3] overflow-hidden"
+        className="relative w-full bg-gradient-to-b from-[hsl(0,35%,18%)] via-[hsl(0,40%,14%)] to-[hsl(0,45%,10%)] rounded-lg overflow-visible"
+        style={{
+          aspectRatio: '4/3',
+          border: '2px solid hsl(42 85% 55% / 0.4)',
+          boxShadow: '0 30px 80px hsl(0 0% 0% / 0.7), 0 0 2px hsl(42 85% 55% / 0.5), inset 0 0 60px hsl(0 80% 50% / 0.08)',
+        }}
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1, ease: 'easeOut' }}
-        style={{ perspective: '1000px' }}
       >
         {/* Subtle pattern overlay */}
         <div 
-          className="absolute inset-0 opacity-5"
+          className="absolute inset-0 opacity-5 rounded-lg"
           style={{
             backgroundImage: `radial-gradient(circle at 2px 2px, hsl(42 85% 55%) 1px, transparent 0)`,
             backgroundSize: '24px 24px',
@@ -47,9 +51,7 @@ const Envelope = ({ recipientName, onOpen }: EnvelopeProps) => {
         />
 
         {/* Inner border */}
-        <motion.div
-          className="absolute inset-4 border border-gold/20 rounded"
-        />
+        <div className="absolute inset-4 border border-gold/20 rounded" />
 
         {/* Decorative corners */}
         <div className="absolute top-5 left-5 w-10 h-10 border-t border-l border-gold/30" />
@@ -57,11 +59,12 @@ const Envelope = ({ recipientName, onOpen }: EnvelopeProps) => {
         <div className="absolute bottom-5 left-5 w-10 h-10 border-b border-l border-gold/30" />
         <div className="absolute bottom-5 right-5 w-10 h-10 border-b border-r border-gold/30" />
 
-        {/* Top flap */}
+        {/* Top flap - triangle */}
         <motion.div
-          className="absolute top-0 left-0 right-0 h-1/2 origin-top z-10"
+          className="absolute top-0 left-0 right-0 origin-top z-10"
           style={{
-            background: 'linear-gradient(180deg, hsl(0 18% 14%) 0%, hsl(0 20% 10%) 100%)',
+            height: '50%',
+            background: 'linear-gradient(180deg, hsl(0 30% 16%) 0%, hsl(0 35% 12%) 100%)',
             clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
             transformStyle: 'preserve-3d',
             backfaceVisibility: 'hidden',
@@ -73,46 +76,52 @@ const Envelope = ({ recipientName, onOpen }: EnvelopeProps) => {
           <div 
             className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-px"
             style={{
-              background: 'linear-gradient(90deg, transparent, hsl(42 85% 55% / 0.4), transparent)',
+              background: 'linear-gradient(90deg, transparent, hsl(42 85% 55% / 0.5), transparent)',
             }}
           />
         </motion.div>
 
-        {/* Seal button */}
+        {/* Seal button - circular gold wax seal */}
         <motion.button
           onClick={handleOpen}
           disabled={isOpening}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
-          whileHover={{ scale: 1.08 }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 focus:outline-none"
+          whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           animate={isOpening ? { scale: 0, opacity: 0, rotate: 90 } : {}}
           transition={{ duration: 0.5 }}
         >
           <motion.div
-            className="relative"
+            className="w-28 h-28 rounded-full flex items-center justify-center cursor-pointer relative"
+            style={{
+              background: 'linear-gradient(135deg, hsl(45 100% 72%), hsl(42 90% 55%), hsl(38 85% 42%))',
+              boxShadow: '0 6px 30px hsl(42 85% 55% / 0.5), 0 10px 50px hsl(42 85% 55% / 0.25), inset 0 2px 4px hsl(45 100% 80% / 0.4)',
+            }}
             animate={{
-              boxShadow: ['0 4px 30px hsl(42 85% 55% / 0.3)', '0 4px 40px hsl(42 85% 55% / 0.5)', '0 4px 30px hsl(42 85% 55% / 0.3)'],
+              boxShadow: [
+                '0 6px 30px hsl(42 85% 55% / 0.4), 0 10px 50px hsl(42 85% 55% / 0.2)',
+                '0 6px 40px hsl(42 85% 55% / 0.6), 0 10px 60px hsl(42 85% 55% / 0.3)',
+                '0 6px 30px hsl(42 85% 55% / 0.4), 0 10px 50px hsl(42 85% 55% / 0.2)',
+              ],
             }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            <div className="seal w-24 h-24 rounded-full flex items-center justify-center cursor-pointer relative">
-              {/* Inner decorative ring */}
-              <div className="absolute inset-2 border border-background/20 rounded-full" />
-              <div className="absolute inset-3 border border-background/10 rounded-full" />
-              
-              {/* Seal text */}
-              <span 
-                className="text-background text-base font-bold tracking-widest font-serif"
-              >
-                拆封
-              </span>
-            </div>
+            {/* Inner decorative rings */}
+            <div className="absolute inset-3 border-2 border-[hsl(0,20%,15%)]/30 rounded-full" />
+            <div className="absolute inset-5 border border-[hsl(0,20%,15%)]/20 rounded-full" />
+            
+            {/* Seal text */}
+            <span 
+              className="text-[hsl(0,20%,10%)] text-lg font-bold tracking-[0.2em] font-serif relative z-10"
+            >
+              拆封
+            </span>
           </motion.div>
         </motion.button>
 
         {/* Recipient label */}
         <motion.div
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-center"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center w-full px-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
@@ -123,7 +132,7 @@ const Envelope = ({ recipientName, onOpen }: EnvelopeProps) => {
             <div className="w-10 h-px bg-gold/40" />
           </div>
           <h2 
-            className="text-3xl gold-text font-bold mb-2 font-serif"
+            className="text-2xl sm:text-3xl gold-text font-bold mb-2 font-serif truncate"
           >
             {recipientName}
           </h2>
@@ -133,12 +142,12 @@ const Envelope = ({ recipientName, onOpen }: EnvelopeProps) => {
         {/* Opening animation - golden light burst */}
         {isOpening && (
           <motion.div
-            className="absolute inset-0 z-30 pointer-events-none"
+            className="absolute inset-0 z-30 pointer-events-none rounded-lg"
             initial={{ opacity: 0 }}
             animate={{ opacity: [0, 0.8, 0] }}
             transition={{ duration: 1.5 }}
             style={{
-              background: 'radial-gradient(circle at 50% 50%, hsl(42 85% 55% / 0.3) 0%, transparent 60%)',
+              background: 'radial-gradient(circle at 50% 50%, hsl(42 85% 55% / 0.4) 0%, transparent 60%)',
             }}
           />
         )}
@@ -147,7 +156,7 @@ const Envelope = ({ recipientName, onOpen }: EnvelopeProps) => {
       {/* Floating hint */}
       {!isOpening && (
         <motion.p
-          className="text-center mt-10 text-gold/50 text-sm tracking-wider font-serif"
+          className="text-center mt-8 text-gold/50 text-sm tracking-wider font-serif"
           initial={{ opacity: 0 }}
           animate={{ opacity: [0.4, 0.7, 0.4] }}
           transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
