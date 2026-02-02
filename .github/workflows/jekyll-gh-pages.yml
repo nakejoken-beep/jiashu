@@ -1,0 +1,40 @@
+name: React CI
+
+# 触发条件：当 main 分支有 push 或 pull_request 时运行
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 拉取代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. 安装 Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm' # 自动缓存依赖，加速构建
+
+      # 3. 安装依赖 (npm ci 比 npm install 更适合 CI 环境)
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. 运行 Lint 检查 (可选，需项目配置了 eslint)
+      - name: Run lint
+        run: npm run lint --if-present
+
+      # 5. 运行测试
+      - name: Run tests
+        run: npm test -- --watchAll=false
+
+      # 6. 执行生产环境构建
+      - name: Build project
+        run: npm run build
