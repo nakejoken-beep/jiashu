@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Hexagon } from 'lucide-react';
 
 interface EnvelopeProps {
   recipientName: string;
@@ -17,59 +16,52 @@ const Envelope = ({ recipientName, onOpen }: EnvelopeProps) => {
 
   return (
     <div className="relative w-full max-w-md mx-auto">
-      {/* Outer glow ring */}
+      {/* Subtle outer glow */}
       <motion.div
-        className="absolute inset-0 -m-8 rounded-full"
+        className="absolute inset-0 -m-12 rounded-full"
         style={{
-          background: 'radial-gradient(circle, hsl(185 100% 50% / 0.1) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, hsl(42 85% 55% / 0.08) 0%, transparent 60%)',
         }}
         animate={{
-          scale: [1, 1.1, 1],
-          opacity: [0.5, 0.8, 0.5],
+          scale: [1, 1.05, 1],
+          opacity: [0.5, 0.7, 0.5],
         }}
-        transition={{ duration: 3, repeat: Infinity }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
 
       {/* Envelope body */}
       <motion.div
-        className="envelope relative w-full aspect-[4/3] rounded-2xl overflow-hidden"
-        initial={{ scale: 0.8, opacity: 0, rotateY: -20 }}
-        animate={{ scale: 1, opacity: 1, rotateY: 0 }}
+        className="envelope relative w-full aspect-[4/3] overflow-hidden"
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1, ease: 'easeOut' }}
         style={{ perspective: '1000px' }}
       >
-        {/* Circuit pattern overlay */}
+        {/* Subtle pattern overlay */}
         <div 
-          className="absolute inset-0 opacity-10"
+          className="absolute inset-0 opacity-5"
           style={{
-            backgroundImage: `
-              linear-gradient(90deg, hsl(185 100% 50% / 0.3) 1px, transparent 1px),
-              linear-gradient(hsl(185 100% 50% / 0.3) 1px, transparent 1px)
-            `,
-            backgroundSize: '20px 20px',
+            backgroundImage: `radial-gradient(circle at 2px 2px, hsl(42 85% 55%) 1px, transparent 0)`,
+            backgroundSize: '24px 24px',
           }}
         />
 
-        {/* Inner border glow */}
+        {/* Inner border */}
         <motion.div
-          className="absolute inset-3 border border-primary/30 rounded-xl"
-          animate={{
-            boxShadow: ['inset 0 0 20px hsl(185 100% 50% / 0.1)', 'inset 0 0 40px hsl(185 100% 50% / 0.2)', 'inset 0 0 20px hsl(185 100% 50% / 0.1)'],
-          }}
-          transition={{ duration: 2, repeat: Infinity }}
+          className="absolute inset-4 border border-gold/20 rounded"
         />
 
         {/* Decorative corners */}
-        <div className="absolute top-4 left-4 w-12 h-12 border-t-2 border-l-2 border-primary/40 rounded-tl-lg" />
-        <div className="absolute top-4 right-4 w-12 h-12 border-t-2 border-r-2 border-primary/40 rounded-tr-lg" />
-        <div className="absolute bottom-4 left-4 w-12 h-12 border-b-2 border-l-2 border-primary/40 rounded-bl-lg" />
-        <div className="absolute bottom-4 right-4 w-12 h-12 border-b-2 border-r-2 border-primary/40 rounded-br-lg" />
+        <div className="absolute top-5 left-5 w-10 h-10 border-t border-l border-gold/30" />
+        <div className="absolute top-5 right-5 w-10 h-10 border-t border-r border-gold/30" />
+        <div className="absolute bottom-5 left-5 w-10 h-10 border-b border-l border-gold/30" />
+        <div className="absolute bottom-5 right-5 w-10 h-10 border-b border-r border-gold/30" />
 
-        {/* Top flap with 3D transform */}
+        {/* Top flap */}
         <motion.div
           className="absolute top-0 left-0 right-0 h-1/2 origin-top z-10"
           style={{
-            background: 'linear-gradient(180deg, hsl(220 35% 14%) 0%, hsl(220 38% 10%) 100%)',
+            background: 'linear-gradient(180deg, hsl(0 18% 14%) 0%, hsl(0 20% 10%) 100%)',
             clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
             transformStyle: 'preserve-3d',
             backfaceVisibility: 'hidden',
@@ -77,11 +69,11 @@ const Envelope = ({ recipientName, onOpen }: EnvelopeProps) => {
           animate={isOpening ? { rotateX: -180, opacity: 0 } : {}}
           transition={{ duration: 1.2, ease: 'easeInOut' }}
         >
-          {/* Flap edge glow */}
+          {/* Flap edge highlight */}
           <div 
-            className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-px"
+            className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-px"
             style={{
-              background: 'linear-gradient(90deg, transparent, hsl(185 100% 50% / 0.5), transparent)',
+              background: 'linear-gradient(90deg, transparent, hsl(42 85% 55% / 0.4), transparent)',
             }}
           />
         </motion.div>
@@ -91,29 +83,26 @@ const Envelope = ({ recipientName, onOpen }: EnvelopeProps) => {
           onClick={handleOpen}
           disabled={isOpening}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.95 }}
-          animate={isOpening ? { scale: 0, opacity: 0, rotate: 180 } : {}}
+          animate={isOpening ? { scale: 0, opacity: 0, rotate: 90 } : {}}
           transition={{ duration: 0.5 }}
         >
           <motion.div
             className="relative"
             animate={{
-              boxShadow: ['0 0 30px hsl(42 100% 50% / 0.4)', '0 0 60px hsl(42 100% 50% / 0.6)', '0 0 30px hsl(42 100% 50% / 0.4)'],
+              boxShadow: ['0 4px 30px hsl(42 85% 55% / 0.3)', '0 4px 40px hsl(42 85% 55% / 0.5)', '0 4px 30px hsl(42 85% 55% / 0.3)'],
             }}
-            transition={{ duration: 1.5, repeat: Infinity }}
+            transition={{ duration: 2, repeat: Infinity }}
           >
             <div className="seal w-24 h-24 rounded-full flex items-center justify-center cursor-pointer relative">
-              {/* Inner ring */}
-              <div className="absolute inset-2 border-2 border-primary-foreground/30 rounded-full" />
+              {/* Inner decorative ring */}
+              <div className="absolute inset-2 border border-background/20 rounded-full" />
+              <div className="absolute inset-3 border border-background/10 rounded-full" />
               
-              {/* Hexagon icon */}
-              <Hexagon className="w-8 h-8 text-primary-foreground/80 absolute" />
-              
-              {/* Text */}
+              {/* Seal text */}
               <span 
-                className="text-primary-foreground text-sm font-bold tracking-widest relative z-10"
-                style={{ fontFamily: 'Orbitron, monospace' }}
+                className="text-background text-base font-bold tracking-widest font-serif"
               >
                 拆封
               </span>
@@ -123,34 +112,33 @@ const Envelope = ({ recipientName, onOpen }: EnvelopeProps) => {
 
         {/* Recipient label */}
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center"
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <div className="w-8 h-px bg-primary/50" />
-            <span className="text-primary/70 text-xs tracking-widest font-mono">TO</span>
-            <div className="w-8 h-px bg-primary/50" />
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <div className="w-10 h-px bg-gold/40" />
+            <span className="text-gold/60 text-xs tracking-[0.3em] font-serif">致</span>
+            <div className="w-10 h-px bg-gold/40" />
           </div>
           <h2 
-            className="text-3xl gold-text font-bold mb-2"
-            style={{ fontFamily: 'Noto Serif SC, serif' }}
+            className="text-3xl gold-text font-bold mb-2 font-serif"
           >
             {recipientName}
           </h2>
-          <p className="text-muted-foreground text-sm tracking-widest">的一封家书</p>
+          <p className="text-muted-foreground text-sm tracking-widest font-serif">的一封家书</p>
         </motion.div>
 
-        {/* Opening animation - light burst */}
+        {/* Opening animation - golden light burst */}
         {isOpening && (
           <motion.div
             className="absolute inset-0 z-30 pointer-events-none"
             initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 1, 0] }}
+            animate={{ opacity: [0, 0.8, 0] }}
             transition={{ duration: 1.5 }}
             style={{
-              background: 'radial-gradient(circle at 50% 50%, hsl(185 100% 50% / 0.3) 0%, transparent 70%)',
+              background: 'radial-gradient(circle at 50% 50%, hsl(42 85% 55% / 0.3) 0%, transparent 60%)',
             }}
           />
         )}
@@ -159,12 +147,12 @@ const Envelope = ({ recipientName, onOpen }: EnvelopeProps) => {
       {/* Floating hint */}
       {!isOpening && (
         <motion.p
-          className="text-center mt-10 text-muted-foreground text-sm font-mono tracking-wider"
+          className="text-center mt-10 text-gold/50 text-sm tracking-wider font-serif"
           initial={{ opacity: 0 }}
-          animate={{ opacity: [0.4, 0.8, 0.4] }}
-          transition={{ duration: 2, repeat: Infinity }}
+          animate={{ opacity: [0.4, 0.7, 0.4] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
         >
-          ▸ 点击印章拆封 ◂
+          点击印章拆封
         </motion.p>
       )}
     </div>
