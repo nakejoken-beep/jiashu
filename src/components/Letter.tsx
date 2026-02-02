@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MessageSquare } from 'lucide-react';
 
 interface LetterProps {
   recipientName: string;
@@ -57,46 +57,69 @@ const Letter = ({ recipientName, onLeaveMessage }: LetterProps) => {
 
   const pageVariants = {
     enter: (direction: number) => ({
-      rotateY: direction > 0 ? 90 : -90,
+      x: direction > 0 ? 100 : -100,
       opacity: 0,
+      scale: 0.95,
     }),
     center: {
-      rotateY: 0,
+      x: 0,
       opacity: 1,
+      scale: 1,
     },
     exit: (direction: number) => ({
-      rotateY: direction > 0 ? -90 : 90,
+      x: direction > 0 ? -100 : 100,
       opacity: 0,
+      scale: 0.95,
     }),
   };
 
   return (
     <motion.div
-      className="w-full max-w-2xl mx-auto"
-      initial={{ opacity: 0, y: 100 }}
-      animate={{ opacity: 1, y: 0 }}
+      className="w-full max-w-3xl mx-auto"
+      initial={{ opacity: 0, y: 100, scale: 0.9 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.8, ease: 'easeOut' }}
     >
       {/* Letter paper */}
-      <div className="letter-paper p-8 md:p-12 min-h-[500px] relative">
-        {/* Header decoration */}
-        <div className="absolute top-4 left-4 right-4 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-        
-        {/* Recipient */}
+      <div className="letter-paper p-8 md:p-12 min-h-[550px] relative">
+        {/* HUD corners */}
+        <div className="hud-corner top-left" />
+        <div className="hud-corner top-right" />
+        <div className="hud-corner bottom-left" />
+        <div className="hud-corner bottom-right" />
+
+        {/* Top decoration */}
         <motion.div
-          className="text-center mb-8"
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px"
+          style={{
+            background: 'linear-gradient(90deg, transparent, hsl(185 100% 50%), transparent)',
+          }}
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        />
+
+        {/* Header */}
+        <motion.div
+          className="text-center mb-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <p className="text-primary text-sm tracking-widest mb-2">一封家书</p>
-          <h1 className="text-2xl md:text-3xl font-serif gold-text">
+          <div className="inline-block mb-3 px-4 py-1 border border-primary/30 rounded-full">
+            <span className="text-xs font-mono tracking-widest text-primary/70">
+              ◈ HOMETOWN LETTER ◈
+            </span>
+          </div>
+          <h1 
+            className="text-3xl md:text-4xl gold-text font-bold"
+            style={{ fontFamily: 'Noto Serif SC, serif' }}
+          >
             致 {recipientName}
           </h1>
         </motion.div>
 
         {/* Page content */}
-        <div className="relative min-h-[300px] perspective-1000">
+        <div className="relative min-h-[300px] overflow-hidden">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={currentPage}
@@ -105,61 +128,92 @@ const Letter = ({ recipientName, onLeaveMessage }: LetterProps) => {
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{ duration: 0.5, ease: 'easeInOut' }}
+              transition={{ duration: 0.4, ease: 'easeInOut' }}
               className="text-letter"
-              style={{ transformStyle: 'preserve-3d' }}
             >
-              <h3 className="text-xl font-serif text-primary mb-6">
+              <h3 
+                className="text-2xl cyber-text mb-6"
+                style={{ fontFamily: 'Noto Serif SC, serif', textShadow: '0 0 10px hsl(185 100% 50% / 0.5)' }}
+              >
                 {letterPages[currentPage].title}
               </h3>
-              <div className="space-y-4 text-foreground/85 leading-loose text-lg">
+              <div className="space-y-5 text-foreground/85 leading-loose text-lg">
                 {letterPages[currentPage].content.split('\n\n').map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
+                  <motion.p
+                    key={index}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    {paragraph}
+                  </motion.p>
                 ))}
               </div>
             </motion.div>
           </AnimatePresence>
         </div>
 
-        {/* Page navigation */}
-        <div className="flex items-center justify-between mt-8 pt-6 border-t border-glass-border">
-          <button
+        {/* Navigation */}
+        <div className="flex items-center justify-between mt-10 pt-6 border-t border-primary/20">
+          <motion.button
             onClick={prevPage}
             disabled={currentPage === 0}
-            className="glass-button flex items-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
+            className="neon-button flex items-center gap-2 px-6 py-3"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <ChevronLeft className="w-4 h-4" />
-            上一页
-          </button>
+            <ChevronLeft className="w-5 h-5" />
+            <span className="font-mono text-sm">上一页</span>
+          </motion.button>
 
           {/* Page indicator */}
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             {letterPages.map((_, index) => (
-              <div
+              <motion.div
                 key={index}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                className={`h-2 rounded-full transition-all duration-300 ${
                   index === currentPage
-                    ? 'bg-primary w-6'
-                    : 'bg-muted-foreground/30'
+                    ? 'w-8 bg-primary shadow-[0_0_10px_hsl(185_100%_50%)]'
+                    : 'w-2 bg-muted-foreground/30'
                 }`}
+                animate={index === currentPage ? { 
+                  boxShadow: ['0 0 10px hsl(185 100% 50% / 0.5)', '0 0 20px hsl(185 100% 50% / 0.8)', '0 0 10px hsl(185 100% 50% / 0.5)']
+                } : {}}
+                transition={{ duration: 1.5, repeat: Infinity }}
               />
             ))}
           </div>
 
           {currentPage < letterPages.length - 1 ? (
-            <button onClick={nextPage} className="glass-button flex items-center gap-2">
-              下一页
-              <ChevronRight className="w-4 h-4" />
-            </button>
+            <motion.button
+              onClick={nextPage}
+              className="neon-button flex items-center gap-2 px-6 py-3"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <span className="font-mono text-sm">下一页</span>
+              <ChevronRight className="w-5 h-5" />
+            </motion.button>
           ) : (
-            <button onClick={onLeaveMessage} className="gold-button flex items-center gap-2">
-              给家乡留言
-            </button>
+            <motion.button
+              onClick={onLeaveMessage}
+              className="gold-neon-button flex items-center gap-2"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <MessageSquare className="w-5 h-5" />
+              <span className="font-mono text-sm">给家乡留言</span>
+            </motion.button>
           )}
         </div>
 
-        {/* Footer decoration */}
-        <div className="absolute bottom-4 left-4 right-4 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+        {/* Bottom decoration */}
+        <motion.div
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-px"
+          style={{
+            background: 'linear-gradient(90deg, transparent, hsl(185 100% 50% / 0.5), transparent)',
+          }}
+        />
       </div>
     </motion.div>
   );

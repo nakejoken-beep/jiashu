@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import ParticleBackground from '@/components/ParticleBackground';
+import CyberBackground from '@/components/CyberBackground';
+import HUDElements from '@/components/HUDElements';
 import NameInput from '@/components/NameInput';
 import Envelope from '@/components/Envelope';
 import Letter from '@/components/Letter';
@@ -25,14 +26,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Particle background */}
-      <ParticleBackground />
+      {/* 3D Cyber Background */}
+      <CyberBackground />
 
-      {/* Ambient glow effects */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-primary/3 rounded-full blur-3xl" />
-      </div>
+      {/* HUD Elements */}
+      <HUDElements />
 
       {/* Audio player */}
       <AudioPlayer />
@@ -45,7 +43,7 @@ const Index = () => {
               key="name"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0, y: -50 }}
+              exit={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
               transition={{ duration: 0.5 }}
             >
               <NameInput onSubmit={handleNameSubmit} />
@@ -55,9 +53,9 @@ const Index = () => {
           {stage === 'envelope' && (
             <motion.div
               key="envelope"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.1 }}
+              initial={{ opacity: 0, scale: 0.8, rotateY: -30 }}
+              animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+              exit={{ opacity: 0, scale: 1.2, filter: 'blur(10px)' }}
               transition={{ duration: 0.6 }}
             >
               <Envelope recipientName={recipientName} onOpen={handleEnvelopeOpen} />
@@ -67,8 +65,8 @@ const Index = () => {
           {stage === 'letter' && (
             <motion.div
               key="letter"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 100, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.6 }}
             >
@@ -95,9 +93,13 @@ const Index = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
       >
-        <p className="text-muted-foreground/50 text-xs tracking-wider">
-          乡情永系 · 家书抵万金
-        </p>
+        <div className="flex items-center gap-3">
+          <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+          <p className="text-muted-foreground/50 text-xs tracking-[0.3em] font-mono uppercase">
+            乡情永系 · 家书抵万金
+          </p>
+          <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+        </div>
       </motion.footer>
     </div>
   );
