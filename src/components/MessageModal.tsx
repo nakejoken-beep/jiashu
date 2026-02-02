@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { X, Send, CheckCircle } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface MessageModalProps {
   isOpen: boolean;
@@ -10,17 +11,38 @@ interface MessageModalProps {
 
 const MessageModal = ({ isOpen, onClose, recipientName }: MessageModalProps) => {
   const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = () => {
-    if (message.trim()) {
-      setIsSubmitted(true);
-      setTimeout(() => {
-        setMessage('');
-        setIsSubmitted(false);
-        onClose();
-      }, 2500);
+  const handleSubmit = async () => {
+    if (!message.trim()) return;
+    
+    setIsSubmitting(true);
+    setError('');
+
+    const { error: submitError } = await supabase
+      .from('messages')
+      .insert({
+        sender_name: recipientName,
+        content: message.trim(),
+      });
+
+    if (submitError) {
+      console.error('Error submitting message:', submitError);
+      setError('留言发送失败，请稍后重试');
+      setIsSubmitting(false);
+      return;
     }
+
+    setIsSubmitting(false);
+    setIsSubmitted(true);
+    
+    setTimeout(() => {
+      setMessage('');
+      setIsSubmitted(false);
+      onClose();
+    }, 2500);
   };
 
   return (
@@ -107,6 +129,16 @@ const MessageModal = ({ isOpen, onClose, recipientName }: MessageModalProps) => 
                       </h2>
                     </div>
 
+                    {error && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-6 p-4 bg-crimson/10 border border-crimson/30 rounded text-crimson text-sm font-serif text-center"
+                      >
+                        {error}
+                      </motion.div>
+                    )}
+
                     {/* Sender info */}
                     <div className="mb-6">
                       <label className="block text-xs text-gold/60 mb-2 tracking-wider font-serif">
@@ -135,13 +167,15 @@ const MessageModal = ({ isOpen, onClose, recipientName }: MessageModalProps) => 
                     {/* Submit button */}
                     <motion.button
                       onClick={handleSubmit}
-                      disabled={!message.trim()}
+                      disabled={!message.trim() || isSubmitting}
                       className="elegant-button w-full flex items-center justify-center gap-3"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
                       <Send className="w-5 h-5" />
-                      <span className="font-serif tracking-wider">发送留言</span>
+                      <span className="font-serif tracking-wider">
+                        {isSubmitting ? '发送中...' : '发送留言'}
+                      </span>
                     </motion.button>
                   </motion.div>
                 )}
