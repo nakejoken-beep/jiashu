@@ -3,83 +3,135 @@ import { useRef, useMemo } from 'react';
 import { Float } from '@react-three/drei';
 import * as THREE from 'three';
 
-// Elegant floating particles
+// Elegant floating particles - mix of gold and red
 const ElegantParticles = () => {
-  const particlesRef = useRef<THREE.Points>(null);
+  const goldParticlesRef = useRef<THREE.Points>(null);
+  const redParticlesRef = useRef<THREE.Points>(null);
   
-  const { positions, sizes } = useMemo(() => {
-    const count = 150;
+  const goldPositions = useMemo(() => {
+    const count = 120;
     const positions = new Float32Array(count * 3);
-    const sizes = new Float32Array(count);
     
     for (let i = 0; i < count; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 50;
       positions[i * 3 + 1] = (Math.random() - 0.5) * 30;
       positions[i * 3 + 2] = (Math.random() - 0.5) * 30 - 10;
-      sizes[i] = Math.random() * 0.08 + 0.02;
     }
     
-    return { positions, sizes };
+    return positions;
+  }, []);
+
+  const redPositions = useMemo(() => {
+    const count = 80;
+    const positions = new Float32Array(count * 3);
+    
+    for (let i = 0; i < count; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 50;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 30;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 30 - 10;
+    }
+    
+    return positions;
   }, []);
 
   useFrame((state) => {
-    if (particlesRef.current) {
-      particlesRef.current.rotation.y = state.clock.elapsedTime * 0.01;
+    if (goldParticlesRef.current) {
+      goldParticlesRef.current.rotation.y = state.clock.elapsedTime * 0.01;
+    }
+    if (redParticlesRef.current) {
+      redParticlesRef.current.rotation.y = -state.clock.elapsedTime * 0.008;
     }
   });
 
   return (
-    <points ref={particlesRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          array={positions}
-          count={positions.length / 3}
-          itemSize={3}
+    <>
+      {/* Gold particles */}
+      <points ref={goldParticlesRef}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            array={goldPositions}
+            count={goldPositions.length / 3}
+            itemSize={3}
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.1}
+          color="#e8b84a"
+          transparent
+          opacity={0.6}
+          sizeAttenuation
         />
-      </bufferGeometry>
-      <pointsMaterial
-        size={0.08}
-        color="#d4a84b"
-        transparent
-        opacity={0.4}
-        sizeAttenuation
-      />
-    </points>
+      </points>
+      
+      {/* Red particles */}
+      <points ref={redParticlesRef}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            array={redPositions}
+            count={redPositions.length / 3}
+            itemSize={3}
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.08}
+          color="#cc4455"
+          transparent
+          opacity={0.5}
+          sizeAttenuation
+        />
+      </points>
+    </>
   );
 };
 
-// Subtle decorative ring
-const GoldenRing = () => {
-  const ringRef = useRef<THREE.Mesh>(null);
+// Decorative rings - gold and red
+const DecorativeRings = () => {
+  const goldRingRef = useRef<THREE.Mesh>(null);
+  const redRingRef = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
-    if (ringRef.current) {
-      ringRef.current.rotation.z = state.clock.elapsedTime * 0.05;
-      ringRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.1) * 0.1;
+    if (goldRingRef.current) {
+      goldRingRef.current.rotation.z = state.clock.elapsedTime * 0.05;
+      goldRingRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.1) * 0.1;
+    }
+    if (redRingRef.current) {
+      redRingRef.current.rotation.z = -state.clock.elapsedTime * 0.03;
+      redRingRef.current.rotation.y = Math.cos(state.clock.elapsedTime * 0.08) * 0.1;
     }
   });
 
   return (
-    <mesh ref={ringRef} position={[0, 0, -15]}>
-      <torusGeometry args={[12, 0.02, 16, 100]} />
-      <meshBasicMaterial color="#d4a84b" transparent opacity={0.2} />
-    </mesh>
+    <>
+      {/* Gold ring */}
+      <mesh ref={goldRingRef} position={[0, 0, -15]}>
+        <torusGeometry args={[12, 0.03, 16, 100]} />
+        <meshBasicMaterial color="#e8b84a" transparent opacity={0.3} />
+      </mesh>
+      
+      {/* Red ring */}
+      <mesh ref={redRingRef} position={[0, 0, -18]}>
+        <torusGeometry args={[15, 0.02, 16, 100]} />
+        <meshBasicMaterial color="#cc4455" transparent opacity={0.2} />
+      </mesh>
+    </>
   );
 };
 
-// Floating decorative elements
+// Floating decorative orbs
 const FloatingOrbs = () => {
   const orbs = useMemo(() => {
     const items = [];
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 12; i++) {
       items.push({
         position: [
-          (Math.random() - 0.5) * 40,
-          (Math.random() - 0.5) * 25,
+          (Math.random() - 0.5) * 45,
+          (Math.random() - 0.5) * 28,
           (Math.random() - 0.5) * 20 - 8
         ] as [number, number, number],
-        scale: Math.random() * 0.3 + 0.1,
+        scale: Math.random() * 0.4 + 0.15,
+        isGold: i % 3 !== 0, // 2/3 gold, 1/3 red
       });
     }
     return items;
@@ -88,13 +140,13 @@ const FloatingOrbs = () => {
   return (
     <group>
       {orbs.map((orb, i) => (
-        <Float key={i} speed={0.5} rotationIntensity={0.2} floatIntensity={0.5}>
+        <Float key={i} speed={0.4} rotationIntensity={0.15} floatIntensity={0.4}>
           <mesh position={orb.position} scale={orb.scale}>
             <sphereGeometry args={[1, 32, 32]} />
             <meshBasicMaterial
-              color={i % 2 === 0 ? "#d4a84b" : "#8b2942"}
+              color={orb.isGold ? "#e8b84a" : "#cc4455"}
               transparent
-              opacity={0.08}
+              opacity={0.12}
             />
           </mesh>
         </Float>
@@ -110,24 +162,25 @@ const PremiumBackground = () => {
         camera={{ position: [0, 0, 20], fov: 50 }}
         gl={{ antialias: true, alpha: true }}
       >
-        <color attach="background" args={['#0d0808']} />
-        <fog attach="fog" args={['#0d0808', 15, 60]} />
+        {/* Dark red-tinted background */}
+        <color attach="background" args={['#1a0a0a']} />
+        <fog attach="fog" args={['#1a0a0a', 15, 60]} />
         
         <ElegantParticles />
-        <GoldenRing />
+        <DecorativeRings />
         <FloatingOrbs />
         
-        <ambientLight intensity={0.05} />
+        <ambientLight intensity={0.08} />
       </Canvas>
       
-      {/* Ambient glow */}
+      {/* Ambient glow - red and gold */}
       <div className="ambient-glow" />
       
-      {/* Subtle vignette */}
+      {/* Subtle vignette with red tint */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at center, transparent 0%, hsl(0 15% 5% / 0.9) 100%)'
+          background: 'radial-gradient(ellipse at center, transparent 0%, hsl(0 30% 6% / 0.85) 100%)'
         }}
       />
     </div>
